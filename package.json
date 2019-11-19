@@ -1,0 +1,35 @@
+{
+  "name": "webp-angle",
+  "version": "1.5.0",
+  "description": "一个无依赖、稳定、美观、易用的 webp 生成器，可以解决你用其他工具生成的 webp 在各种平台下表现不一的问题。",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build  -mw"
+  },
+  "author": "ShiLei",
+  "license": "BSD",
+  "devDependencies": {
+    "electron": "^6.0.12",
+    "electron-builder": "^21.2.0"
+  },
+  "keywords": [
+    "webp"
+  ],
+  "bugs": {
+    "url": "https://github.com/nervouself/webp-angle/issues"
+  },
+  "homepage": "https://github.com/nervouself/webp-angle",
+  "build": {
+    "appId": "com.shilei.app",
+    "productName": "webp小天使",
+    "icon": "./src/icon.png",
+    "asar": false,
+    "mac": {
+      "target": "zip"
+    },
+    "win": {
+      "target": "zip"
+    }
+  }
+}
