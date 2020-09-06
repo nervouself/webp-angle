@@ -1,8 +1,10 @@
 const { ipcRenderer } = require('electron')
-const { exec } = require('child_process')
+const { exec, execFile } = require('child_process')
 const path = require('path')
 
-const binPath = path.join(__dirname, '/bin/img2webp')
+const isWin = process.platform === 'win32'
+
+const binPath = path.join(__dirname, `/bin/img2webp${isWin ? '.exe' : ''}`)
 
 const accepts = ['png', 'jpg', 'jpeg', 'tiff']
 let dragTimer = null
@@ -56,7 +58,7 @@ new Vue({
         >
           <i class="cross"></i>
           <p>
-            {{dragover ? '松开以选择文件' : '选择多个文件'}}<br />
+            {{dragover ? '松开以选择文件' : '选择多个相同尺寸文件'}}<br />
             支持 png、jpg、tiff 等格式
           </p>
           <button @click="select"></button>
@@ -129,15 +131,22 @@ new Vue({
     savePath(event, res) {
       const { canceled, filePath } = res
       if (!canceled && filePath) {
-        let cmd = `${binPath} -loop ${this.options.loop} -d ${this.options.d} -lossy -m 5 -q ${this.options.q}`
+        const onepic = this.imgs.length === 1
+        const loop = onepic ? 1 : this.options.loop
+        const d = !onepic ? `-d ${this.options.d}` : ''
+        let cmd = `${binPath} -loop ${loop} ${d} -lossy -m 5 -q ${this.options.q}`
         this.imgs.forEach((img) => {
-          cmd += ` ${img.d > 0 ? ' -d ' + img.d : ''} '${img.path}'`
+          cmd += ` ${!onepic && img.d > 0 ? ' -d ' + img.d : ''} '${img.path}'`
         })
         cmd += ` -o '${filePath}'`
 
         this.loading = true
-        exec('chmod +x ' + binPath, () => {
-          exec(cmd, (error) => {
+
+        if (isWin) {
+          exec(cmd.replace(/'/g, ''), {
+            windowsHide: true,
+            shell: process.env.ComSpec || 'cmd.exe',
+          }, (error) => {
             this.loading = false
             if (error) {
               this.error(`生成 webp 错误：${error.message}`)
@@ -145,7 +154,18 @@ new Vue({
             }
             this.success(`生成 webp 成功`)
           })
-        })
+        } else {
+          exec('chmod +x ' + binPath, () => {
+            exec(cmd, (error) => {
+              this.loading = false
+              if (error) {
+                this.error(`生成 webp 错误：${error.message}`)
+                return
+              }
+              this.success(`生成 webp 成功`)
+            })
+          })
+        }
       }
     },
 

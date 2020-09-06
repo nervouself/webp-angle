@@ -1,11 +1,12 @@
 {
   "name": "webp-angle",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "一个无依赖、稳定、美观、易用的 webp 生成器，可以解决你用其他工具生成的 webp 在各种平台下表现不一的问题。",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder build  -mw"
+    "build": "electron-builder build  -mw",
+    "build-win": "electron-builder build  -w"
   },
   "author": "ShiLei",
   "license": "BSD",

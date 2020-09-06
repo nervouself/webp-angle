@@ -127,7 +127,6 @@ const template = [
     submenu: [
       { role: 'reload' },
       { role: 'forcereload' },
-      { role: 'toggledevtools' },
       { type: 'separator' },
       { role: 'resetzoom' },
       { role: 'zoomin' },
