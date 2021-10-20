@@ -20,3 +20,4 @@
     <img width="700" src="assets/2.png" alt="">
 </p>
 
+注：win 平台路径中不要带空格，因为 cmd 对于引号的识别问题可能会导致报错。
