@@ -16,6 +16,7 @@ function createWindow () {
     title: `webp 小天使 v${pkg.version}`,
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
     },
   })
 
